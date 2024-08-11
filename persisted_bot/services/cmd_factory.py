@@ -12,9 +12,10 @@ from services.commands.cmd_not_found import CmdNotFound
 
 class CmdFactory:
 
-    def __init__(self, birth_service, storage):
+    def __init__(self, birth_service, storage, persistence_service):
         self.birth_service = birth_service
         self.storage = storage
+        self.persistence_service = persistence_service
         self.__init_commands()
 
     def find_command(self, user_inp: str):
@@ -34,6 +35,6 @@ class CmdFactory:
         self.commands[CmdDel.CMD_NAME] = CmdDel(self.storage)
         self.commands[CmdBirthAdd.CMD_NAME] = CmdBirthAdd(self.storage)
         self.commands[CmdBirthList.CMD_NAME] = CmdBirthList(self.birth_service)
-        self.commands[CmdExit.CMD_NAME] = CmdExit()
+        self.commands[CmdExit.CMD_NAME] = CmdExit(self.persistence_service)
         self.commands["close"] = self.commands.get(CmdExit.CMD_NAME)
         self.commands["help"] = self.commands.get(CmdNotFound.CMD_NAME)

@@ -1,3 +1,4 @@
+from persisted_bot.services.persistence import Persistence
 from services.adress_book import AddressBook
 from services.birthdays import Birthdays
 from services.cmd_factory import CmdFactory
@@ -19,13 +20,16 @@ def init_test_data(controller):
 
 
 def main():
-    storage = AddressBook()
+
+    persistence_service = Persistence()
+    storage = persistence_service.load()
+
     birthdays = Birthdays(storage)
-    cmd_factory = CmdFactory(birthdays, storage)
+    cmd_factory = CmdFactory(birthdays, storage, persistence_service)
     controller = Controller(cmd_factory)
     view = View(controller)
 
-    init_test_data(controller)
+    # init_test_data(controller)
 
     view.start("help")
 
